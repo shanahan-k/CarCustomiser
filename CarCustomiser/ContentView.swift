@@ -8,10 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var remainingFunds = 1000
     @State private var starterCars = StarterCars()
     @State private var selectedCar : Int = 0
     @State private var exhaustPackage = false
     @State private var tirePackage = false
+    @State private var driveTrainPackage = false
+    @State private var ecuFuelPackage = false
+    
+    
+    var exhaustPackageEnabled: Bool {
+        return exhaustPackage ? true :  remainingFunds >= 500 ? true : false
+    }
+    
+    var tiresPackageEnabled: Bool {
+        return tirePackage ? true : remainingFunds >= 500 ? true : false
+    }
+    
+    
+    var ecuFuelPackageEnabled: Bool {
+        return ecuFuelPackage ? true : remainingFunds >= 1000 ? true : false
+    }
+    
+    var driveTrainPackageEnabled:Bool  {
+        return driveTrainPackage ? true : remainingFunds >= 500 ? true : false
+    }
     
     var body: some View {
         
@@ -31,12 +52,25 @@ struct ContentView: View {
         let tirePackageBinding = Binding<Bool> (
             get : {self.tirePackage},
             set: {
-                newVal in self.tirePackage = newVal
-                if newVal {
+                newValue in self.tirePackage = newValue
+                if newValue {
                     starterCars.cars[selectedCar].handling += 2
                 }
                 else {
                     starterCars.cars[selectedCar].handling -= 2
+                }
+            }
+        )
+        let ecuFuelPackageBinding = Binding<Bool> (
+            get : {self.ecuFuelPackage},
+            set: {
+            newValue in self.ecuFuelPackage = newValue
+                if newValue {
+                    starterCars.cars[selectedCar].acceleration -= 0.5
+                }
+                else{
+                    starterCars.cars[selectedCar].acceleration += 0.5
+                    
                 }
             }
         )
@@ -48,11 +82,13 @@ struct ContentView: View {
             .padding()
             Button("Next Car", action:{
                 selectedCar = (selectedCar + 1) % self.starterCars.cars.count
+                
             })
         }
             Section {
-                Toggle("exhaust package" , isOn: exhaustPackageBinding)
-                Toggle("Tires Package" , isOn : tirePackageBinding)
+                Toggle("exhaust package($500)" , isOn: exhaustPackageBinding)
+                Toggle("Tires Package($500)" , isOn : tirePackageBinding)
+                Toggle("ECU & fuel package ($1000)" , isOn: ecuFuelPackageBinding )
             }
             
             
