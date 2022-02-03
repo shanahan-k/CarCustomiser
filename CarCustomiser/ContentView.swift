@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var remainingFunds = 2000
+    @State private var remainingFunds = 1000
     @State private var starterCars = StarterCars()
     @State private var selectedCar : Int = 0
     @State private var exhaustPackage = false
@@ -115,9 +115,9 @@ struct ContentView: View {
             }).disabled(buttonDisabled)
         }
             Section {
-                Toggle("exhaust package ($500)" , isOn: exhaustPackageBinding)
-                Toggle("Tires Package ($500)" , isOn : tirePackageBinding)
-                Toggle("ECU & fuel package ($1000)" , isOn: ecuFuelPackageBinding )
+                Toggle("exhaust package ($500)" , isOn: exhaustPackageBinding).disabled(!exhaustPackageEnabled)
+                Toggle("Tires Package ($500)" , isOn : tirePackageBinding).disabled(!tiresPackageEnabled)
+                Toggle("ECU & fuel package ($1000)" , isOn: ecuFuelPackageBinding ).disabled(!ecuFuelPackageEnabled)
             }
            
             
